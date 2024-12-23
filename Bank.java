@@ -63,7 +63,24 @@ public class Bank {
             String dob = userInput.next();
             
 
-            System.out.println("Account created successfully for below details");
+            System.out.println("Savings Account created successfully for below details");
+            System.out.println("Account number: " + accNumber + " for " + firstName + " " + lastName + " living in " + "Address: " + address + " DOB: " +dob);
+        }
+            //placeholder
+        else {
+            UUID accNumber = UUID.randomUUID();
+            
+            System.out.println("Enter the firstName as per: ");
+            String firstName = userInput.next();
+            System.out.println("Enter the lastName: ");
+            String lastName = userInput.next();
+            System.out.println("Enter the address: ");
+            String address = userInput.next();
+            System.out.println("Enter the dob: ");
+            String dob = userInput.next();
+            
+
+            System.out.println("Salary Account created successfully for below details");
             System.out.println("Account number: " + accNumber + " for " + firstName + " " + lastName + " living in " + "Address: " + address + " DOB: " +dob);
         }
 
