@@ -1,4 +1,8 @@
-//this class will have withdraw, deposit and checkbalance  impl
+package src.main.java.bank;
+
+import src.main.java.bank.enums.*;
+import src.main.java.bank.utils.*;
+import src.main.java.bank.bankOperations.*;
 
 import java.util.Scanner;
 
@@ -6,34 +10,23 @@ public class Bank_Account {
     public static void main(String[] args) {
         Bank bank = new Bank();
         while (true) {
-            Scanner chooseOption = new Scanner(System.in);
-            System.out.println("Press 1 to deposit");
-            System.out.println("Press 2 to widraw amt");
-            System.out.println("Press 3 to check balance");
-            System.out.println("Press 4 to create account");
-    
-            int userChoice = chooseOption.nextInt();
-            if ( userChoice == 1 )
-            {
-                bank.deposit();
-            } 
-            else if (userChoice == 2) {
-                  bank.withdraw();
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("Press 1 for new account creation");
+            System.out.println("Press 2 to login");
+
+            int userChoice = scanner.nextInt();
+            UserAccountType userInput = ParseUserInput.parseUserInput(userChoice);
+            switch (userInput) {
+                case CREATEACCOUNT -> new CreateAccount().execute();
+                case LOGIN -> bank.login();
+                default -> { break; }
             }
-            else if (userChoice == 3 ){
-                bank.getBalance();
-            }
-            else if (userChoice ==4) {
-                bank.createAccount();
-            }
-            else {
-                System.out.println("not matching the options");
-            }
-            System.out.println("Do you want to continue or quit(q)");
-            String toQuit = chooseOption.next();
-            if ( toQuit.equals("q")) {
+
+            System.out.println("Do you want to continue(c) or quit(q)");
+            String toQuit = scanner.next();
+            if (toQuit.equals("q")) {
                 break;
-            }     
+            }
         }
     }
 }
