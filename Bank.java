@@ -1,88 +1,45 @@
-//Able to  create account a. savings b. current
-//account should have a. unique account number b. firstname c.lastname d.address
+package src.main.java.bank;
+
+import src.main.java.bank.enums.*;
+import src.main.java.bank.bankOperations.*;
+import src.main.java.bank.utils.*;
+
 import java.util.Scanner;
-import java.util.UUID;
 
 public class Bank {
-    String name;
     private int balance;
 
-    public void deposit() {
-        Scanner userObj = new Scanner(System.in);
-        System.out.println("Enter amount to be deposited" );
+    public void login() {
+        while (true) {
+            Scanner chooseOption = new Scanner(System.in);
+            System.out.println("Press 1 to deposit");
+            System.out.println("Press 2 to withdraw amt");
+            System.out.println("Press 3 to check balance");
+            System.out.println("Press 4 to create account");
 
-        int amount = userObj.nextInt();
-        balance += balance + amount; 
-        System.out.println("Amount deposited: " + amount);
-    }
+            int userInput = chooseOption.nextInt();
+            BankOperation userChoice = ParseBankOperation.parseUserInput(userInput);
 
-    public void withdraw() {
-        Scanner amt = new Scanner(System.in);
-        System.out.println("Select the Type of account");
-        System.out.println("Press 1 for savings");
-        System.out.println("Press 2 for current");
-
-        int accountType = amt.nextInt();
- 
-        System.out.println("Enter amt to be withdrwan");
-
-        int withdrawAmt = amt.nextInt();
-        if ( balance > withdrawAmt )
-        {
-            balance = balance-withdrawAmt;
-            System.out.println("amount withdrawn successfully"+ withdrawAmt);
-        } else {
-            System.out.println("cancelled transaction - insufficient balance");
+            switch (userChoice) {
+                case DEPOSIT -> new Deposit().execute(this);
+                case WITHDRAW -> new Withdraw().execute(this);
+                case GETBALANCE -> new GetBalance().execute(this);
+                case CREATEACCOUNT -> new CreateAccount().execute();
+                default -> System.out.println("not matching the options");
+            }
+            System.out.println("Do you want to continue(c) or quit(q)");
+            String toQuit = chooseOption.next();
+            if (toQuit.equals("q")) {
+                break;
+            }
         }
     }
 
-     void getBalance() {
-        System.out.println("Current balance: " + balance);
+    public int getBalance() {
+        return balance;
     }
 
-    public void createAccount() {
-        Scanner userInput = new Scanner(System.in);
-        System.out.println("Enter the Account type you wish to create");
-        System.out.println("Press 1 for Savings account");
-        System.out.println("Press 2 for Salary account");
-
-
-        int userChoice = userInput.nextInt();
-        userInput.nextLine();
-
-        if(userChoice == 1) {
-            UUID accNumber = UUID.randomUUID();
-            
-            System.out.println("Enter the firstName: ");
-            String firstName = userInput.next();
-            System.out.println("Enter the lastName: ");
-            String lastName = userInput.next();
-            System.out.println("Enter the address: ");
-            String address = userInput.next();
-            System.out.println("Enter the dob: ");
-            String dob = userInput.next();
-            
-
-            System.out.println("Savings Account created successfully for below details");
-            System.out.println("Account number: " + accNumber + " for " + firstName + " " + lastName + " living in " + "Address: " + address + " DOB: " +dob);
-        }
-            //placeholder
-        else {
-            UUID accNumber = UUID.randomUUID();
-            
-            System.out.println("Enter the firstName as per: ");
-            String firstName = userInput.next();
-            System.out.println("Enter the lastName: ");
-            String lastName = userInput.next();
-            System.out.println("Enter the address: ");
-            String address = userInput.next();
-            System.out.println("Enter the dob: ");
-            String dob = userInput.next();
-            
-
-            System.out.println("Salary Account created successfully for below details");
-            System.out.println("Account number: " + accNumber + " for " + firstName + " " + lastName + " living in " + "Address: " + address + " DOB: " +dob);
-        }
-
+    public void setBalance(int balance) {
+        this.balance = balance;
     }
 }
