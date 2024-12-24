@@ -4,37 +4,53 @@ import src.main.java.bank.enums.*;
 import src.main.java.bank.bankOperations.*;
 import src.main.java.bank.utils.*;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Bank {
+    //encapsulation
     private int balance;
 
     public void login() {
         while (true) {
-            Scanner chooseOption = new Scanner(System.in);
+            Scanner chooseOptionForBanking = new Scanner(System.in);
             System.out.println("Press 1 to deposit");
             System.out.println("Press 2 to withdraw amt");
             System.out.println("Press 3 to check balance");
-            System.out.println("Press 4 to create account");
 
-            int userInput = chooseOption.nextInt();
-            BankOperation userChoice = ParseBankOperation.parseUserInput(userInput);
+            try {
+                int userInputToChooseOperations = chooseOptionForBanking.nextInt();
+                OperationType userChoice = ParseBankOperation.parseUserInput(userInputToChooseOperations);
 
-            switch (userChoice) {
-                case DEPOSIT -> new Deposit().execute(this);
-                case WITHDRAW -> new Withdraw().execute(this);
-                case GETBALANCE -> new GetBalance().execute(this);
-                case CREATEACCOUNT -> new CreateAccount().execute();
-                default -> System.out.println("not matching the options");
+                //polymorphism
+                BankOperation operation;
+
+                switch (userChoice) {
+                    case DEPOSIT -> operation = new Deposit();
+                    case WITHDRAW -> operation = new Withdraw();
+                    case GETBALANCE -> operation = new GetBalance();
+                    default -> { System.out.println("not matching the options");
+                    continue;}
+                }
+                operation.execute(this);
+            } catch (InputMismatchException e) {
+                    System.out.println("Invalid input, please enter a number - "+ e);
             }
+            
+            Scanner userSessionExpiry = new Scanner(System.in);
             System.out.println("Do you want to continue(c) or quit(q)");
-            String toQuit = chooseOption.next();
-            if (toQuit.equals("q")) {
+            String toContinueOrQuit = userSessionExpiry.next();
+            if (toContinueOrQuit.equals("q")) {
+                break;
+            } else if (toContinueOrQuit.equals("c")){
+                continue;
+            } else {
+                System.out.println("Invalid entry, press (c) to continue or (q) to quit");
                 break;
             }
         }
     }
-
+    //encapsulation
     public int getBalance() {
         return balance;
     }
